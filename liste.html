@@ -25,6 +25,24 @@
         .modal-body input {
             margin-bottom: 10px;
         }
+        /* Ajouter des marges pour un meilleur espacement sur mobile */
+        .container {
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+        .card-body {
+            padding: 15px;
+        }
+        /* Adapter le tableau pour les petits écrans */
+        @media (max-width: 768px) {
+            .table th, .table td {
+                font-size: 0.9rem;
+            }
+            .modal-dialog {
+                max-width: 100%;
+                margin: 0;
+            }
+        }
     </style>
 </head>
 <body class="bg-light">
@@ -43,7 +61,7 @@
 
 <!-- Modal de modification -->
 <div class="modal fade" id="modifierModal" tabindex="-1" aria-labelledby="modifierModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="modifierModalLabel">Modifier l'inscription</h5>
@@ -57,7 +75,7 @@
                     <input type="text" id="categorie" class="form-control" placeholder="Catégorie" required>
                     <input type="text" id="groupe" class="form-control" placeholder="Groupe" required>
                     <input type="hidden" id="indexToModify">
-                    <button type="submit" class="btn btn-primary mt-3">Sauvegarder</button>
+                    <button type="submit" class="btn btn-primary mt-3 w-100">Sauvegarder</button>
                 </form>
             </div>
         </div>
@@ -110,7 +128,6 @@
 
     function modifierInscription(index) {
         let inscription = inscriptions[index];
-        // Remplir les champs du formulaire modal avec les données de l'inscription
         document.getElementById("nom").value = inscription.nom;
         document.getElementById("prenom").value = inscription.prenom;
         document.getElementById("telephone").value = inscription.telephone;
@@ -118,7 +135,6 @@
         document.getElementById("groupe").value = inscription.groupe;
         document.getElementById("indexToModify").value = index;
 
-        // Afficher le modal
         let modal = new bootstrap.Modal(document.getElementById('modifierModal'));
         modal.show();
     }
@@ -131,26 +147,20 @@
         }
     }
 
-    // Gérer la soumission du formulaire de modification
     document.getElementById("modifierForm").addEventListener("submit", function(event) {
-        event.preventDefault();  // Empêcher la soumission du formulaire
+        event.preventDefault();
         let index = document.getElementById("indexToModify").value;
         let inscription = inscriptions[index];
 
-        // Mettre à jour les données
         inscription.nom = document.getElementById("nom").value;
         inscription.prenom = document.getElementById("prenom").value;
         inscription.telephone = document.getElementById("telephone").value;
         inscription.categorie = document.getElementById("categorie").value;
         inscription.groupe = document.getElementById("groupe").value;
 
-        // Sauvegarder les données mises à jour dans le localStorage
         localStorage.setItem("inscriptions", JSON.stringify(inscriptions));
-
-        // Rafraîchir la liste des inscriptions
         afficherInscriptions();
 
-        // Fermer le modal
         let modal = bootstrap.Modal.getInstance(document.getElementById('modifierModal'));
         modal.hide();
     });
