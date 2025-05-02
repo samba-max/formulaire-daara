@@ -1,215 +1,206 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Liste des Inscriptions</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Liste des Inscriptions Daara</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    body {
+      background-color: #f4f9ff;
+    }
+    .table th, .table td {
+      vertical-align: middle;
+    }
+    .table-secondary {
+      background-color: #007bff !important;
+      color: white;
+    }
+    .btn-primary {
+      background-color: #007bff;
+      border: none;
+    }
+    .btn-primary:hover {
+      background-color: #0056b3;
+    }
+    .btn-warning {
+      color: black;
+    }
+  </style>
 </head>
-<body class="bg-light">
+<body>
 
-<div class="container py-5">
-  <h1 class="text-center text-primary mb-4">Liste des Inscriptions</h1>
+  <div class="container mt-4 mb-5">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h2 class="text-primary">Liste des Inscriptions</h2>
+      <button class="btn btn-primary" onclick="telechargerPDF()">Télécharger PDF</button>
+    </div>
 
-  <!-- Bouton de téléchargement en PDF -->
-  <button class="btn btn-info mb-4" onclick="telechargerPDF()">Télécharger en PDF</button>
-  
-  <div class="table-responsive">
-    <table class="table table-bordered table-striped table-hover align-middle text-center" id="tableInscriptions">
-      <thead class="table-primary">
-        <tr>
-          <th>Nom</th>
-          <th>Prénom</th>
-          <th>Téléphone</th>
-          <th>Catégorie</th>
-          <th>Groupe</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody id="tbodyInscriptions"></tbody>
-    </table>
+    <div class="table-responsive">
+      <table class="table table-bordered" id="tableInscriptions">
+        <thead class="table-light">
+          <tr>
+            <th>Nom</th>
+            <th>Prénom</th>
+            <th>Téléphone</th>
+            <th>Catégorie</th>
+            <th>Groupe</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="tbodyInscriptions"></tbody>
+      </table>
+    </div>
   </div>
-  
-  <!-- Bouton de retour -->
-  <a href="index.html" class="btn btn-primary mt-4">Retour à l'index</a>
-</div>
 
-<!-- Modal de modification -->
-<div class="modal fade" id="modalModifier" tabindex="-1" aria-labelledby="modifierLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <form id="formModifier">
-        <div class="modal-header">
-          <h5 class="modal-title text-primary" id="modifierLabel">Modifier une inscription</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+  <!-- Modal Modifier -->
+  <div class="modal fade" id="modalModifier" tabindex="-1" aria-labelledby="modalModifierLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <form class="modal-content" id="formModifier">
+        <div class="modal-header bg-primary text-white">
+          <h5 class="modal-title">Modifier l'inscription</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fermer"></button>
         </div>
         <div class="modal-body">
           <input type="hidden" id="indexModifier">
           <div class="mb-3">
-            <label>Nom</label>
+            <label for="nomModifier" class="form-label">Nom</label>
             <input type="text" class="form-control" id="nomModifier" required>
           </div>
           <div class="mb-3">
-            <label>Prénom</label>
+            <label for="prenomModifier" class="form-label">Prénom</label>
             <input type="text" class="form-control" id="prenomModifier" required>
           </div>
           <div class="mb-3">
-            <label>Téléphone</label>
+            <label for="telephoneModifier" class="form-label">Téléphone</label>
             <input type="tel" class="form-control" id="telephoneModifier" required>
           </div>
           <div class="mb-3">
-            <label>Catégorie</label>
+            <label for="categorieModifier" class="form-label">Catégorie</label>
             <select class="form-select" id="categorieModifier" required>
-              <option>50 000 FCFA</option>
-              <option>30 000 FCFA</option>
-              <option>25 000 FCFA</option>
-              <option>15 000 FCFA</option>
-              <option>10 000 FCFA</option>
-              <option>5 000 FCFA</option>
+              <option value="50000 FCFA">50000 FCFA</option>
+              <option value="30000 FCFA">30000 FCFA</option>
+              <option value="20000 FCFA">20000 FCFA</option>
+              <option value="10000 FCFA">10000 FCFA</option>
+              <option value="5000 FCFA">5000 FCFA</option>
+              <option value="Autres">Autres</option>
             </select>
           </div>
           <div class="mb-3">
-            <label>Groupe</label>
-            <select class="form-select" id="groupeModifier" required>
-              <option>Kourel 1</option>
-              <option>Kourel 2</option>
-              <option>Membre Femme</option>
-              <option>Membre Homme</option>
-            </select>
+            <label for="groupeModifier" class="form-label">Groupe</label>
+            <input type="text" class="form-control" id="groupeModifier" required>
           </div>
         </div>
         <div class="modal-footer">
-          <button type="submit" class="btn btn-success">Enregistrer</button>
+          <button type="submit" class="btn btn-primary">Enregistrer</button>
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
         </div>
       </form>
     </div>
   </div>
-</div>
 
-<script>
-  // Afficher les inscriptions par catégorie
-  function afficherInscriptions() {
-    const inscriptions = JSON.parse(localStorage.getItem("inscriptions")) || [];
-    const tbody = document.getElementById("tbodyInscriptions");
-    tbody.innerHTML = "";
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
-    // Grouper les inscriptions par catégorie
-    const groupes = inscriptions.reduce((acc, inscription) => {
-      const categorie = inscription.categorie;
-      if (!acc[categorie]) {
-        acc[categorie] = [];
-      }
-      acc[categorie].push(inscription);
-      return acc;
-    }, {});
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const tbody = document.getElementById("tbodyInscriptions");
+      const inscriptions = JSON.parse(localStorage.getItem("inscriptions")) || [];
 
-    // Afficher les inscriptions sous chaque catégorie
-    for (let categorie in groupes) {
-      const group = groupes[categorie];
-      
-      // Ajouter une ligne pour la catégorie
-      const trCategorie = document.createElement("tr");
-      const tdCategorie = document.createElement("td");
-      tdCategorie.colSpan = 6;
-      tdCategorie.classList.add("table-secondary");
-      tdCategorie.textContent = `Catégorie: ${categorie}`;
-      trCategorie.appendChild(tdCategorie);
-      tbody.appendChild(trCategorie);
-
-      // Afficher les inscriptions de cette catégorie
-      group.forEach((inscription, index) => {
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td>${inscription.nom}</td>
-          <td>${inscription.prenom}</td>
-          <td>${inscription.telephone}</td>
-          <td>${inscription.categorie}</td>
-          <td>${inscription.groupe}</td>
-          <td>
-            <button class="btn btn-warning btn-sm me-1" onclick="modifierInscription(${index})">Modifier</button>
-            <button class="btn btn-danger btn-sm" onclick="supprimerInscription(${index})">Supprimer</button>
-          </td>
-        `;
-        tbody.appendChild(tr);
+      // Grouper par catégorie
+      const groupesParCategorie = {};
+      inscriptions.forEach((inscription, index) => {
+        const cat = inscription.categorie;
+        if (!groupesParCategorie[cat]) {
+          groupesParCategorie[cat] = [];
+        }
+        groupesParCategorie[cat].push({ ...inscription, index });
       });
-    }
-  }
 
-  // Supprimer une inscription
-  function supprimerInscription(index) {
-    const inscriptions = JSON.parse(localStorage.getItem("inscriptions")) || [];
-    inscriptions.splice(index, 1);
-    localStorage.setItem("inscriptions", JSON.stringify(inscriptions));
-    afficherInscriptions();
-  }
+      // Affichage
+      for (const categorie in groupesParCategorie) {
+        const group = groupesParCategorie[categorie];
 
-  // Remplir et afficher le modal de modification
-  function modifierInscription(index) {
-    const inscriptions = JSON.parse(localStorage.getItem("inscriptions")) || [];
-    const data = inscriptions[index];
+        // Titre de catégorie
+        const trCat = document.createElement("tr");
+        trCat.innerHTML = `<td colspan="6" class="table-secondary fw-bold text-start">${categorie}</td>`;
+        tbody.appendChild(trCat);
 
-    document.getElementById("indexModifier").value = index;
-    document.getElementById("nomModifier").value = data.nom;
-    document.getElementById("prenomModifier").value = data.prenom;
-    document.getElementById("telephoneModifier").value = data.telephone;
-    document.getElementById("categorieModifier").value = data.categorie;
-    document.getElementById("groupeModifier").value = data.groupe;
-
-    const modal = new bootstrap.Modal(document.getElementById("modalModifier"));
-    modal.show();
-  }
-
-  // Soumettre le formulaire de modification
-  document.getElementById("formModifier").addEventListener("submit", function(e) {
-    e.preventDefault();
-    const inscriptions = JSON.parse(localStorage.getItem("inscriptions")) || [];
-    const index = document.getElementById("indexModifier").value;
-
-    inscriptions[index] = {
-      nom: document.getElementById("nomModifier").value.trim(),
-      prenom: document.getElementById("prenomModifier").value.trim(),
-      telephone: document.getElementById("telephoneModifier").value.trim(),
-      categorie: document.getElementById("categorieModifier").value,
-      groupe: document.getElementById("groupeModifier").value
-    };
-
-    localStorage.setItem("inscriptions", JSON.stringify(inscriptions));
-    bootstrap.Modal.getInstance(document.getElementById("modalModifier")).hide();
-    afficherInscriptions();
-  });
-
-  // Fonction pour télécharger en PDF sans les boutons de modification et suppression
-  function telechargerPDF() {
-    // Masquer les boutons Modifier et Supprimer
-    const boutons = document.querySelectorAll(".btn-warning, .btn-danger");
-    boutons.forEach(btn => btn.style.display = "none");
-
-    // Obtenir l'élément du tableau
-    const element = document.getElementById('tableInscriptions');
-
-    // Définir les options de conversion en PDF
-    const opt = {
-      margin:       1,
-      filename:     'Inscriptions.pdf',
-      image:        { type: 'jpeg', quality: 0.98 },
-      html2canvas:  { scale: 2 },
-      jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
-    };
-
-    // Générer le PDF
-    html2pdf().from(element).set(opt).save().then(() => {
-      // Restaurer l'affichage des boutons après l'exportation
-      boutons.forEach(btn => btn.style.display = "");
+        // Lignes de données
+        group.forEach(({ nom, prenom, telephone, groupe, index }) => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td>${nom}</td>
+            <td>${prenom}</td>
+            <td>${telephone}</td>
+            <td>${categorie}</td>
+            <td>${groupe}</td>
+            <td>
+              <button class="btn btn-sm btn-warning me-1" onclick="ouvrirModal(${index})">Modifier</button>
+              <button class="btn btn-sm btn-danger" onclick="supprimerInscription(${index})">Supprimer</button>
+            </td>
+          `;
+          tbody.appendChild(tr);
+        });
+      }
     });
-  }
 
-  // Initialiser l'affichage
-  afficherInscriptions();
-</script>
+    // Ouvrir le modal
+    function ouvrirModal(index) {
+      const inscriptions = JSON.parse(localStorage.getItem("inscriptions")) || [];
+      const ins = inscriptions[index];
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+      document.getElementById("indexModifier").value = index;
+      document.getElementById("nomModifier").value = ins.nom;
+      document.getElementById("prenomModifier").value = ins.prenom;
+      document.getElementById("telephoneModifier").value = ins.telephone;
+      document.getElementById("categorieModifier").value = ins.categorie;
+      document.getElementById("groupeModifier").value = ins.groupe;
+
+      new bootstrap.Modal(document.getElementById("modalModifier")).show();
+    }
+
+    // Modifier
+    document.getElementById("formModifier").addEventListener("submit", function (e) {
+      e.preventDefault();
+      const index = document.getElementById("indexModifier").value;
+      const inscriptions = JSON.parse(localStorage.getItem("inscriptions")) || [];
+
+      inscriptions[index] = {
+        nom: document.getElementById("nomModifier").value,
+        prenom: document.getElementById("prenomModifier").value,
+        telephone: document.getElementById("telephoneModifier").value,
+        categorie: document.getElementById("categorieModifier").value,
+        groupe: document.getElementById("groupeModifier").value,
+      };
+
+      localStorage.setItem("inscriptions", JSON.stringify(inscriptions));
+      window.location.reload();
+    });
+
+    // Supprimer
+    function supprimerInscription(index) {
+      if (confirm("Voulez-vous vraiment supprimer cette inscription ?")) {
+        const inscriptions = JSON.parse(localStorage.getItem("inscriptions")) || [];
+        inscriptions.splice(index, 1);
+        localStorage.setItem("inscriptions", JSON.stringify(inscriptions));
+        window.location.reload();
+      }
+    }
+
+    // Télécharger PDF
+    function telechargerPDF() {
+      const element = document.getElementById("tableInscriptions");
+      const opt = {
+        margin: 0.5,
+        filename: 'liste_inscriptions.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+      };
+      html2pdf().set(opt).from(element).save();
+    }
+  </script>
 </body>
 </html>
